@@ -112,11 +112,13 @@ public class DockerSwarmComputerLauncher extends JNLPLauncher {
                     }
                 }
             
-            launchContainer(finalCommand.toArray(new String[0]), configuration, envVars, dockerSwarmAgentTemplate.getWorkingDir(),
+            launchContainer(finalCommand.toArray(new String[0]), dockerSwarmAgentTemplate.getArgsConfig(),
+                    configuration, envVars, dockerSwarmAgentTemplate.getWorkingDir(),
                     dockerSwarmAgentTemplate.getUser(), dockerSwarmAgentTemplate, listener, computer,
                     dockerSwarmAgentTemplate.getHostsConfig());
         } else {
-            launchContainer(dockerSwarmAgentTemplate.getUnixCommandConfig(), configuration, envVars,
+            launchContainer(dockerSwarmAgentTemplate.getUnixCommandConfig(), dockerSwarmAgentTemplate.getArgsConfig(),
+                    configuration, envVars,
                     dockerSwarmAgentTemplate.getWorkingDir(), dockerSwarmAgentTemplate.getUser(),
                     dockerSwarmAgentTemplate, listener, computer, dockerSwarmAgentTemplate.getHostsConfig());
         }
@@ -134,11 +136,11 @@ public class DockerSwarmComputerLauncher extends JNLPLauncher {
         }
     }
 
-    public void launchContainer(String[] commands, DockerSwarmCloud configuration, String[] envVars, String dir,
+    public void launchContainer(String[] commands, String[] args,DockerSwarmCloud configuration, String[] envVars, String dir,
             String user, DockerSwarmAgentTemplate dockerSwarmAgentTemplate, TaskListener listener,
             DockerSwarmComputer computer, String[] hosts) throws IOException {
         DockerSwarmPlugin swarmPlugin = Jenkins.getInstance().getPlugin(DockerSwarmPlugin.class);
-        ServiceSpec crReq = createCreateServiceRequest(commands, configuration, envVars, dir, user,
+        ServiceSpec crReq = createCreateServiceRequest(commands, args, configuration, envVars, dir, user,
                 dockerSwarmAgentTemplate, computer, hosts);
 
         setLimitsAndReservations(dockerSwarmAgentTemplate, crReq);
@@ -178,10 +180,10 @@ public class DockerSwarmComputerLauncher extends JNLPLauncher {
             dockerSwarmAgentTemplate.getPlacementArchitecture(), dockerSwarmAgentTemplate.getPlacementOperatingSystem());
     }
 
-    private ServiceSpec createCreateServiceRequest(String[] commands, DockerSwarmCloud configuration, String[] envVars,
+    private ServiceSpec createCreateServiceRequest(String[] commands, String[] args, DockerSwarmCloud configuration, String[] envVars,
             String dir, String user, DockerSwarmAgentTemplate dockerSwarmAgentTemplate, DockerSwarmComputer computer,
             String[] hosts) throws IOException {
-        ServiceSpec crReq = new ServiceSpec(computer.getName(), dockerSwarmAgentTemplate.getImage(), commands, envVars,
+        ServiceSpec crReq = new ServiceSpec(computer.getName(), dockerSwarmAgentTemplate.getImage(), commands, args, envVars,
                 dir, user, hosts);
         return crReq;
     }

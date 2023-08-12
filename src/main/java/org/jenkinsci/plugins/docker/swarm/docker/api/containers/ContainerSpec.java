@@ -7,6 +7,7 @@ public class ContainerSpec {
 
     public final String Image;
     public final String[] Command;
+    public final String[] Args;
     public final String[] Env;
     public final String Dir;
     public final String User;
@@ -17,12 +18,13 @@ public class ContainerSpec {
     public List<Config> Configs = new ArrayList<>();
 
     public ContainerSpec() {
-        this(null, null, null, null, null, null);
+        this(null, null, null, null, null, null, null);
     }
 
-    public ContainerSpec(String image, String[] cmd, String[] env, String dir, String user, String[] hosts) {
+    public ContainerSpec(String image, String[] cmd, String[] args, String[] env, String dir, String user, String[] hosts) {
         this.Image = image;
         this.Command = cmd;
+        this.Args = args;
         this.Env = env;
         this.Dir = dir;
         this.User = user;

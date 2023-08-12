@@ -28,11 +28,11 @@ public class ServiceSpec extends ApiRequest {
 
     public List<Network> Networks = new ArrayList<>();
 
-    public ServiceSpec(String name, String Image, String[] Cmd, String[] Env, String Dir, String User, String[] Hosts)
+    public ServiceSpec(String name, String Image, String[] Cmd, String[] args, String[] Env, String Dir, String User, String[] Hosts)
             throws IOException {
         super(HttpMethod.POST, "/services/create", CreateServiceResponse.class, ResponseType.CLASS);
         this.Name = name;
-        this.TaskTemplate = new TaskTemplate(Image, Cmd, Env, Dir, User, Hosts);
+        this.TaskTemplate = new TaskTemplate(Image, Cmd, args, Env, Dir, User, Hosts);
         this.EndpointSpec = new EndpointSpec();
     }
 
